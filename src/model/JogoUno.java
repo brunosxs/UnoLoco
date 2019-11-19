@@ -97,6 +97,8 @@ public class JogoUno {
                 System.out.println("Revertendo a ordem para o sentido "+ sentido+ ", próximo jogador é "+ getNextPlayerRelativeTo(atual));
             } else if (efeito == EfeitoCarta.ELIMINAR_ANTERIOR) {
                 System.out.println(" Rodando eliminar anterior");
+                System.out.println("Eliminando o anterior de " + atual.getNome());
+                System.out.println(getPreviousPlayerRelativeTo(atual).getNome());
                 removerJogador(getPreviousPlayerRelativeTo(atual));
             } else if (efeito == EfeitoCarta.ELIMINAR_ATUAL) {
                 System.out.println(" Rodando eliminar ATUAL");
@@ -126,14 +128,6 @@ public class JogoUno {
             return;
         }
         if (inicial.getEsquerda() != inicial) {
-//            Jogador temporario = inicial.getEsquerda();
-//            do {
-//                System.out.println("Checando se Jogador " + temporario.getNome() + " Está do lado do primeiro(ou seja é o último)" );
-//                if (temporario.getEsquerda() == inicial) {
-//
-//                }
-//                temporario = temporario.getEsquerda();
-//            } while (temporario != inicial);
                 System.out.println("Ao fim foi adicionado " + jogador.getNome());
                 jogador.setEsquerda(inicial);
                 jogador.setDireita(inicial.getDireita());
@@ -144,25 +138,28 @@ public class JogoUno {
     }
 
     private void removerJogador(Jogador jogador) {
-        Jogador proximo, anterior;
+        Jogador novoInicial, anterior;
         if (jogador == inicial) {
-             proximo = getNextPlayerRelativeTo(inicial);
-             inicial = proximo;
+             novoInicial = getNextPlayerRelativeTo(inicial);
+             anterior = getPreviousPlayerRelativeTo(inicial);
+             inicial = novoInicial;
              if (reverso) {
-                 inicial.setEsquerda(jogador.getEsquerda());
+                 novoInicial.setEsquerda(anterior);
+                 anterior.setDireita(novoInicial);
              } else {
-                 inicial.setDireita(jogador.getDireita());
+                 novoInicial.setDireita(anterior);
+                 anterior.setEsquerda(novoInicial);
              }
              return;
         } else {
-            proximo = getNextPlayerRelativeTo(jogador);
+            novoInicial = getNextPlayerRelativeTo(jogador);
             anterior = getPreviousPlayerRelativeTo(jogador);
             if (reverso) {
-                proximo.setEsquerda(anterior);
-                anterior.setDireita(proximo);
+                novoInicial.setEsquerda(anterior);
+                anterior.setDireita(novoInicial);
             } else {
-                proximo.setDireita(anterior);
-                anterior.setEsquerda(proximo);
+                novoInicial.setDireita(anterior);
+                anterior.setEsquerda(novoInicial);
             }
         }
         String message = "Jogador " + jogador.getNome() + " foi eliminado!";
