@@ -92,6 +92,18 @@ public class Jogador {
         return "Nome: "+ nome + " cor: "+ cor;
     }
 
+    public CartaBase jogarCarta(int id) {
+        System.out.println(" valor provido pra escolha de carta foi "+ id);
+        CartaBase returnedCard;
+        try {
+            returnedCard = cartas.get(id);
+            cartas.remove(id);
+        } catch (Exception e) {
+            returnedCard = null;
+        }
+        return returnedCard;
+    }
+
     public String exibirMao() {
         String retornar ="\n";
         int lineSize = 40;
