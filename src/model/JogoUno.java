@@ -88,8 +88,8 @@ public class JogoUno {
             } else if(efeito == EfeitoCarta.SUSPENDER) {
                 Jogador j = getNextPlayerRelativeTo(atual);
                 j.setStatus(JogadorStatus.suspenso);
-                System.out.println("Jogador " + j.getNome() + " foi suspenso por " +j.getRodadasSemJogar() + " rodadas" );
                 j.setRodadasSemJogar(j.getRodadasSemJogar() + 3);
+                System.out.println("Jogador " + j.getNome() + " foi suspenso por " +j.getRodadasSemJogar() + " rodadas" );
             } else if (efeito == EfeitoCarta.REVERTER) {
                 reverso = !reverso;
                 String sentido = reverso? "antihorário": "horário";
@@ -212,15 +212,16 @@ public class JogoUno {
         }
 
         Jogador temporario = atual;
-            temporario = getNextPlayerRelativeTo(atual);
-            do {
+            temporario = atual;
+            atual = getNextPlayerRelativeTo(atual);
+             while (temporario != atual && atual.getStatus() == JogadorStatus.suspenso) {
                 System.out.println(temporario.getNome() + " é o próximo depois do " + atual.getNome());
                 if (atual.getStatus() == JogadorStatus.suspenso) {
                     atual.subtractRodadasSemJogar();
                     System.out.println(atual.getNome() + " está suspenso por mais "+ atual.getRodadasSemJogar());
                 }
                 atual = getNextPlayerRelativeTo(atual);
-            } while (temporario != atual && atual.getStatus() == JogadorStatus.suspenso);
+            }
     }
     private CartaBase executarVez(Jogador jogador) {
         CartaBase carta = null;
